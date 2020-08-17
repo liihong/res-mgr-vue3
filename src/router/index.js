@@ -1,25 +1,65 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter, createWebHistory } from 'vue-router';
 
-const routes = [
+/* Layout */
+import Layout from '@/layout/Layout';
+
+export const constantRouterMap = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: '主页',
+    component: Layout,
+    children: [{
+      path: '/',
+      name: '资源管理',
+      component: () =>
+        import('@/pages/res-config/index'),
+      children: [{
+        path: '/resConfigList',
+        name: '资源字段列表',
+        component: () =>
+          import('@/pages/res-config/res-config-attr.vue'),
+      },
+      {
+        path: '/resDataList',
+        name: '资源呈现',
+        component: () =>
+          import('../pages/res-data/res-data-list.vue'),
+      }],
+      // },
+      // {
+      //   path: '/resRelation',
+      //   name: '资源关系',
+      //   component: () =>
+      //     import('@/views/resConfig/resConfigList.vue'),
+      // },
+      // {
+      //   path: '/resConfig',
+      //   name: '系统设置',
+      //   component: () =>
+      //     import('@/views/resConfig/resConfigList.vue'),
+      // },
+      // {
+      //   path: '/resEdit',
+      //   name: '资源修改',
+      //   hidden: true,
+      //   component: () =>
+      //     import('@/views/resMgr/ResEdit.vue'),
+    },
+    ],
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+  // {
+  //   path: '/login',
+  //   name: '登录',
+  //   hidden: true,
+  //   component: () =>
+  //     import('@/views/login/login'),
+  // },
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(),
+  routes: constantRouterMap,
+});
 
-export default router
+
+export default router;
