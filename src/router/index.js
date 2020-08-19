@@ -10,40 +10,22 @@ export const constantRouterMap = [
     component: Layout,
     children: [{
       path: '/',
-      name: '资源管理',
       component: () =>
         import('@/pages/res-config/index'),
       children: [{
         path: '/resConfigList',
-        name: '资源字段列表',
         component: () =>
           import('@/pages/res-config/res-config-attr.vue'),
       },
       {
-        path: '/resDataList',
-        name: '资源呈现',
+        path: '/dataEdit/:tableId',
         component: () =>
-          import('../pages/res-data/res-data-list.vue'),
-      }],
-      // },
-      // {
-      //   path: '/resRelation',
-      //   name: '资源关系',
-      //   component: () =>
-      //     import('@/views/resConfig/resConfigList.vue'),
-      // },
-      // {
-      //   path: '/resConfig',
-      //   name: '系统设置',
-      //   component: () =>
-      //     import('@/views/resConfig/resConfigList.vue'),
-      // },
-      // {
-      //   path: '/resEdit',
-      //   name: '资源修改',
-      //   hidden: true,
-      //   component: () =>
-      //     import('@/views/resMgr/ResEdit.vue'),
+          import('@/pages/res-data/data-edit.vue'),
+      },{
+        path: '/dataList/:tableId',
+        component: () =>
+          import('@/pages/res-data/data-list.vue'),
+      }]
     },
     ],
   },

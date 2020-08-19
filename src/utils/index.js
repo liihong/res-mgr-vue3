@@ -36,3 +36,16 @@ export function formatTreeData (list = []) {
 	}
 	return res;
 }
+
+/**
+ * 根据时间生成时间戳
+ */
+export function getUUId() {
+  let uuid = ''; // 订单号
+  for (var i = 0; i < 6; i++) // 6位随机数，用以加在时间戳后面。
+  {
+    uuid += Math.floor(Math.random() * 9);
+  }
+  uuid = new Date().getTime() + uuid; 
+  return uuid;
+}

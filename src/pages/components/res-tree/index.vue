@@ -10,9 +10,11 @@
 </template>
 
 <script>
-import { getResTree } from '../../../api/config';
-import { reactive, getCurrentInstance, inject } from 'vue';
-import { formatTreeData } from '../../../utils/util';
+import { getResTree } from '@/api/config';
+import { reactive, inject } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { formatTreeData } from '@/utils/index';
 export default {
   setup () {
     const state = reactive({
@@ -21,16 +23,17 @@ export default {
     });
     const title = inject('activeTitle');
     const activeMenu = inject('activeMenu');
+
+    const router = useRouter()
+
     getResTree().then(res => {
       state.treeData = formatTreeData(res.data);
     });
-    const { ctx } = getCurrentInstance();
 
     const onSelect = (selectedKeys, { node }) => {
       title.value = node.title;
-      ctx.$router.push({ path: activeMenu.key === '2' ? '/resDataList' : '/resConfigList', query: { table_id: selectedKeys[0] } });
+      router.push({ path: activeMenu.key === '2' ? `/dataList/${selectedKeys[0]}` : `/resConfigList/${selectedKeys[0]}`});
     };
-
 
     return {
       state,

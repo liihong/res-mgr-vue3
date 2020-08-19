@@ -5,7 +5,7 @@
     </div>
     <div class="res-config-right">
       <breadcrumb />
-      <router-view />
+      <router-view :key="getUUId()" />
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@
 import resTree from '../components/res-tree';
 import breadcrumb from '../components/breadcrumb';
 import { provide, ref } from 'vue';
+import {getUUId} from '@/utils/index'
 export default {
   components: {
     resTree,
@@ -25,6 +26,8 @@ export default {
 
     return {
       activeTitle,
+
+      getUUId
     };
   },
 };

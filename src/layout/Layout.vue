@@ -37,6 +37,7 @@ export default {
       key: '1',
       title: '资源管理',
     });
+    
     provide('activeMenu',activeMenu);
 
     const handlerClickMenu = ({item,key})=>{

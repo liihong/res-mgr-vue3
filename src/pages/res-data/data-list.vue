@@ -1,6 +1,6 @@
 <template>
-  <div class="res-data-list">
-    <div class="res-data-list-toolbar">
+  <div class="data-list">
+    <div class="data-list-toolbar">
       <a-form layout="inline"
               :model="queryData"
               @submit.prevent="handleSubmit">
@@ -21,8 +21,8 @@
         </a-form-item>
       </a-form>
     </div>
-    <div class="res-data-list-table">
-      <a-table :data-source="tableInfo.data"
+    <div class="data-list-table">
+      <a-table :data-source="tableInfo.data" size="middle" :pagination="false" bordered
                row-key="id">
         <a-table-column key="index"
                         align="center"
@@ -36,8 +36,8 @@
         <a-table-column v-for="col in tableInfo.columns"
                         :key="col.column_id"
                         :title="col.column_cname"
-                        :align="col.text_align? col.text_align :'center'"
-                        :width="col.column_length? col.column_length : ''"
+                        :align="col.text_align || 'center'"
+                        :width="col.column_length || null"
                         :data-index="col.column_name"
                         :property-type="col.property_type">
           <template v-slot="{record}">
@@ -59,20 +59,34 @@
                 <a-popconfirm title="是否确认删除？"
                               ok-text="是的"
                               cancel-text="取消" @confirm="() => deleteRow(record)">
-                  <a href="#">删除</a>
+                  <a style="margin-left:10px;" href="#">删除</a>
                 </a-popconfirm>
               </span>
             </div>
           </template>
         </a-table-column>
       </a-table>
+      <div class="pagination">
+      <a-pagination
+        size="small"
+        :total="queryData.total"
+        :current="page"
+        showSizeChanger
+        showQuickJumper
+        :showTotal="total => `共 ${total} 项`"
+        @change="onPageChange"
+        @showSizeChange="sizeChange"
+        :pageSize="pageSize"
+      />
+    </div>
     </div>
   </div>
 </template>
 
 <script>
 import { reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import {message} from 'ant-design-vue'
 import { getTableConfig, getTableDataList, deleteTableData } from '@/api/res-data/index';
 
 export default {
@@ -91,9 +105,10 @@ export default {
       config: {},
     });
 
-
-    const router = useRoute();
-    const tableId = router.query?.table_id
+    const route = useRoute();
+    const router = useRouter()
+    const tableId = route.params?.tableId
+    
     getTableConfig({ tableId, flag: 'list' }).then(res => {
       tableInfo.columns = res.data?.columns;
       tableInfo.config = res.data.table;
@@ -107,13 +122,18 @@ export default {
     });
 
     const editRow = (row) => {
-      console.log(row);
+      router.push({path: `/dataEdit/${tableId}`,query:{id: row[tableInfo.config['primary_key']]}})
     };
 
     const deleteRow = (row) => {
       deleteTableData({
         tableId,
         id: row[tableInfo.config['primary_key']]
+      }).then(res=>{
+        if(res.status === 0) {
+          message.success('删除成功');
+          getTableDataList({ tableId })
+        }
       })
     }
 
@@ -129,4 +149,7 @@ export default {
 </script>
 
 <style>
+.data-list-table{
+
+}
 </style>

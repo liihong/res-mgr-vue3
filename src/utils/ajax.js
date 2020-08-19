@@ -98,7 +98,7 @@ axios.get = function (url, param) {
           cancel = c;
         }),
       }).then(res => {
-        resolve(res);
+        resolve(res.data);
       }).catch(err => {
         reject(err);
       });
