@@ -26,6 +26,6 @@ export async function deleteTableData (params) {
   return await request.post(api.deleteTableData, params);
 }
 
-export function getDataById(params) {
-  return request.get(api.queryDataById, params);
+export async function getDataById(params) {
+  return await request.get(api.queryDataById, params);
 }

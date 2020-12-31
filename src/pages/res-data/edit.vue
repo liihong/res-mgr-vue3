@@ -1,26 +1,16 @@
 <template>
   <a-row>
-    <a-form :model="form"
+    <a-form :model="tableInfo.data"
             :label-col="{ span: 2 }"
             :wrapper-col="{ span: 14 }">
       <a-form-item v-for="item in tableInfo.columns"
                    :key="item.column_id"
-                   :label="item.column_cname">
-        <a-input v-decorator="[
-          `${item.column_name}`,
-          {
-            validateTrigger: ['change', 'blur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: 'Please input passenger\'s name or delete this field.',
-              },
-            ],
-          },
-        ]"
-                 placeholder="passenger name"
-                 style="width: 60%; margin-right: 8px" />
+                   :label="item.column_cname" :name="item.column_name">
+        <component :is="columnConfig[item.property_type]['component']" v-bind="tableInfo.data[item.column_name]"
+            v-model="tableInfo.data[item.column_name]" :prop="item.column_name" />
+            <!-- <a-input :value="tableInfo.data[item.column_name]"/>
+            {{columnConfig[item.property_type]['component']}} -->
+            {{tableInfo.data[item.column_name]}}
       </a-form-item>
 
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
@@ -37,33 +27,37 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, provide } from 'vue'
 import { columnConfig } from '@/utils/config'
-import { getTableConfig, getDataById } from '@/api/res-data'
+import { getTableConfig,getDataById } from '@/api/res-data'
 import { useRoute } from 'vue-router'
+import Input from '@/components/input/index.vue'
+import AutoSerial from '@/components/auto-serial/index.vue'
 export default {
+  components:{
+    RInput:Input,
+    AutoSerial,
+  },
   setup () {
-    let formData = reactive({
-
-    })
     const tableInfo = reactive({
       columns: [],
-      config: {}
+      config: {},
+      data: {}
     })
     const route = useRoute();
     const tableId = route.params?.tableId
-
+    
     getTableConfig({ tableId, flag: 'update' }).then(res => {
       tableInfo.columns = res.data?.columns;
       tableInfo.config = res.data.table;
     });
 
     getDataById({ tableId, id: route.query?.id }).then(res => {
-      formData = res.data
+      tableInfo.data = res.data
+      provide('formData',res.data)
     })
 
     return {
-      formData,
       tableInfo,
       columnConfig
     }

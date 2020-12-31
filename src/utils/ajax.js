@@ -4,7 +4,7 @@ import axios from 'axios';
 let cancel, promiseArr = {};
 const CancelToken = axios.CancelToken;
 
-axios.defaults.baseURL = 'http://localhost/api';
+axios.defaults.baseURL = '/api';
 //设置默认请求头
 axios.defaults.headers = {
   'X-Requested-With': 'XMLHttpRequest',

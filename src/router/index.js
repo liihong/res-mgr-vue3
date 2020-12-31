@@ -13,18 +13,18 @@ export const constantRouterMap = [
       component: () =>
         import('@/pages/res-config/index'),
       children: [{
-        path: '/resConfigList',
+        path: '/resConfigList/:tableId',
         component: () =>
-          import('@/pages/res-config/res-config-attr.vue'),
+          import('@/pages/res-config/attr-list.vue'),
       },
       {
         path: '/dataEdit/:tableId',
         component: () =>
-          import('@/pages/res-data/data-edit.vue'),
+          import('@/pages/res-data/edit.vue'),
       },{
         path: '/dataList/:tableId',
         component: () =>
-          import('@/pages/res-data/data-list.vue'),
+          import('@/pages/res-data/list.vue'),
       }]
     },
     ],
