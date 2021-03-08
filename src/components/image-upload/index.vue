@@ -10,7 +10,8 @@
   >
     <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
     <div v-else>
-      <a-icon :type="loading ? 'loading' : 'plus'" />
+      <LoadingOutlined v-if="loading" />
+      <PlusOutlined />
       <div class="ant-upload-text">
         Upload
       </div>
@@ -18,12 +19,17 @@
   </a-upload>
 </template>
 <script>
+import {LoadingOutlined, PlusOutlined} from 'ant-design-vue'
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
 }
 export default {
+  components:{
+    LoadingOutlined,
+    PlusOutlined
+  },
   data() {
     return {
       loading: false,

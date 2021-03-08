@@ -1,5 +1,5 @@
 <template>
-  <div>{{data}}</div>
+  <div>{{value}}</div>
 </template>
 
 <script>
@@ -18,9 +18,6 @@ export default {
       default: ''
     }
   },
-  setup(props,ctx){
-    console.log(ctx)
-  }
 }
 </script>
 

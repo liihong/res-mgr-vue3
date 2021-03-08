@@ -29,11 +29,11 @@
              tableLayout="auto"
              :data-source="tableData"
              rowKey="column_id">
-      <template v-slot:column_id="text">
-         <a-button  size="small" type="primary" shape="circle"  @click="handleEdit(text)">
+      <template v-slot:column_id="{record}">
+         <a-button  size="small" type="primary" shape="circle"  @click="handleEdit(record)">
           <EditOutlined />
          </a-button>
-          <a-button  size="small" type="danger" shape="circle"  @click="deleteResAttr(text)">
+          <a-button  size="small" type="danger" shape="circle"  @click="deleteResAttr(record)">
           <DeleteOutlined />
          </a-button>
       </template>
@@ -72,15 +72,18 @@
       </template>
        <template #is_list="{record}">
         <a-switch size="small" v-model:checked="record.is_list" />
+        <a-input-number size="small" style="width:40px" :min="1" v-model:value="record.list_order" />
       </template>
        <template #is_sort="{record}">
         <a-switch size="small" v-model:checked="record.is_sort" />
       </template>
        <template #is_update="{record}">
         <a-switch size="small" v-model:checked="record.is_update" />
+        <a-input-number size="small" style="width:40px" :min="1" v-model:value="record.update_order" />
       </template>
        <template #is_insert="{record}">
         <a-switch size="small" v-model:checked="record.is_insert" />
+        <a-input-number size="small" style="width:40px" :min="1" v-model:value="record.insert_order" />
       </template>
       <template #is_export="{record}">
         <a-switch size="small" v-model:checked="record.is_export" />
@@ -97,11 +100,10 @@ import columns from './columns';
 import {dataType, columnConfig} from '@/utils/config'
 import { getResAttrConfig, saveResConfig, createTable, loadTable } from '@/api/config/index'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
-
 export default {
   components:{
     EditOutlined,
-    DeleteOutlined
+    DeleteOutlined,
   },
   data () {
     return {
@@ -119,7 +121,13 @@ export default {
         }
       ],
       dataType,
-      columnConfig
+      columnConfig,
+      dialogState:{
+        show: false,
+        type: 'edit',
+        formData: {}
+      },
+      isAttrEdit: false
     }
   },
   mounted () {
@@ -141,10 +149,8 @@ export default {
       })
     },
     handleEdit (row) {
-      this.dialogState.show = !this.dialogState.show
-      this.dialogState.type = 'edit'
-      this.dialogState.name = '编辑字段'
       this.dialogState.formData = row
+      this.$router.push({path: `/resAttrEdit/${this.tableId}`,query: {columnId: row.column_id}})
     },
     //删除字段
     deleteResAttr () {
@@ -231,7 +237,7 @@ export default {
   }
 }
 .table-content {
-  height: calc(100vh - 300px);
+  height: calc(100vh - 230px);
   overflow: auto;
 }
 </style>

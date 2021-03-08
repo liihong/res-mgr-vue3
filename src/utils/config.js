@@ -1,5 +1,5 @@
 export const columnConfig = [
-  {value: '1', label: '文本框', component: 'r-input' },
+  {value: '1', label: '文本框', component: 'a-input' },
   {value: '2', label: '下拉列表', component: 'select' },
   {value: '3', label: '复选框', component: 'checkbox' },
   {value: '4', label: '单选框', component: 'radio' },

@@ -14,9 +14,14 @@
         </a-form-item>
         <a-form-item>
           <a-button type="primary"
-                    html-type="submit"
-                    :disabled="queryData.user === '' || queryData.password === ''">
+                    html-type="query">
             查询
+          </a-button>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary"
+                    html-type="submit">
+            新增
           </a-button>
         </a-form-item>
       </a-form>
@@ -84,7 +89,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { provide, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {message} from 'ant-design-vue'
 import { getTableConfig, getTableDataList, deleteTableData } from '@/api/res-data/index';
@@ -122,6 +127,7 @@ export default {
     });
 
     const editRow = (row) => {
+      provide('formDDD', row)
       router.push({path: `/dataEdit/${tableId}`,query:{id: row[tableInfo.config['primary_key']]}})
     };
 

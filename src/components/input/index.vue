@@ -1,13 +1,15 @@
 <template>
   <div>
-    <a-input :value="data" v-bind="$attrs" placeholder="Basic usage" />
+    <a-input v-model:value="info" v-bind="$attrs" placeholder="Basic usage" />
   </div>
 </template>
 
 <script>
-import { inject } from 'vue'
 export default {
   name:'rInput',
+
+  inheritAttrs: false,
+
   props:{
     value:{
       type: String,
@@ -22,13 +24,15 @@ export default {
       default: ''
     }
   },
-  setup(){
-    const formData = inject('formData')
-    console.log(formData)
+  data(){
     return {
-      formData
+      info: ''
     }
-  }
+  },
+  mounted() {
+    console.log(this.$attrs.id)
+    this.info = this.$props.value
+  },
 }
 </script>
 
